@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>뮬인/게시판</title>
+    <script>
+    </script>
+    <style>
+        html {
+            background-color: #f8f8f8;
+            min-height: 100%;
+            min-width: none;
+        }       
+
+        body {
+            font-family: 'Noto Sans Kr', sans-serif;
+            margin: 0 auto;
+            padding: 0;
+            max-width: 1400px; 
+            width: 100%; 
+            background-color: transparent;
+        }
+
+        .header-wrapper {
+            width: 100vw;          
+            background-color: #f8f8f8;
+            position: relative;   
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .header-wrapper2{
+            width: 100vw;   
+            background-color: #ffffff; 
+            position: relative;   
+            left: 50%;
+            transform: translateX(-50%); 
+            border-bottom: 0.5px solid #ccc ;
+        }
+
+        .header {
+            max-width: 1400px;    
+            margin: 0 auto;       
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background-color: #fff; 
+            z-index: 10;
+        }
+
+        .header .logo {
+            margin-left: 60px;
+            margin-right: 70px;
+        }
+        
+        .header .logo img {
+            height: 30px;
+        }
+
+        .header .search-container {
+            flex-grow: 1;
+            max-width: 600px;
+        }
+
+        .header .search-container input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            outline: none;
+            font-size: 14px;
+            padding-left: 35px;
+        }
+
+        .header .icons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-right: 60px;
+            margin-left: 80px;
+        }
+
+        .header .icons a {
+            text-decoration: none;
+            color: #727272;
+            font-size: 18px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .header .icons a:hover {
+            color:#3366ff;
+            transform: scale(1.05); 
+        }
+
+        .header .icons a img {
+            width: 17px; /* 원하는 너비 */
+            height: 17px; /* 원하는 높이 */
+            object-fit: cover; /* 이미지 비율 유지 */
+            transition: transform 0.2s ease-in-out; /* 호버 시 효과를 추가하기 위해 전환 추가 */
+        }
+
+        .header .icons a img:hover {
+            transform: scale(1.1); /* 호버 시 약간 확대 */
+        }
+
+        .header .icons .login {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .nav {
+            background-color: #fff; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 17px 20px;
+            font-size: 14px;    
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .menu {
+            display: flex;
+            gap: 80px;
+            position: relative;
+        }
+
+        .menu-item {
+            position: relative;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: #333;
+            font-size: 13px;
+            transition: transform 0.2s ease-in-out; /* 부드러운 전환 */
+        }
+
+        .menu a:hover {
+            color: #3366ff; /* 색상 변경 */
+        }
+
+        .submenu {
+            display: none; 
+            position: absolute;
+            top: 100%; 
+            left: 0;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            z-index: 10;
+            padding: 10px 0;
+            min-width: 150px;
+        }
+
+        .submenu a {
+            display: block;
+            text-decoration: none;
+            color: #333;
+            padding: 8px 15px;
+            font-size: 12px;
+            transition: background-color 0.2s;
+        }
+
+        .submenu a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .menu-item:hover .submenu {
+            display: block;
+        }
+
+        .main-wrapper {
+            max-width: 1160px; /* 최대 너비 */
+            margin: 20px auto; /* 중앙 정렬 */
+            padding: 0 20px; /* 좌우 패딩 추가 */
+            background-color: #f8f8f8; /* 배경색 유지 */
+            box-sizing: border-box; /* 패딩 포함 */
+        }
+   
+        .board-header {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            margin-top: 20px;
+        }
+
+        .board-path {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .board-filters {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-item {
+            position: relative;
+        }
+
+        .filter-button {
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            color: #333;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .filter-button:hover {
+            background-color: #eef;
+            border-color: #3366ff;
+            color: #3366ff;
+        }
+
+        /* 서브메뉴 */
+        .submenu {
+            display: none; /* 기본적으로 숨김 */
+            position: absolute;
+            top: 100%; /* 부모 요소 아래로 배치 */
+            left: 0;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            padding: 10px 0;
+            z-index: 10;
+            min-width: 150px; /* 메뉴의 최소 너비 설정 */
+        }
+
+        .submenu a {
+            display: block;
+            padding: 8px 15px;
+            font-size: 13px;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .submenu a:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* 호버 시 서브메뉴 표시 */
+        .filter-item:hover .submenu {
+            display: block;
+        }
+
+        /* 검색 바 */
+        .search-bar {
+            margin-left: auto;
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .search-bar input {
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .search-bar button {
+            padding: 8px 8px;
+            background-color: #ffffff;
+            color: #fff;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search-bar button:hover {
+            transform: scale(1.1);
+        }
+
+        .search-bar button img {
+            width: 17px; 
+            height: 19px; 
+            object-fit: cover; 
+            transition: transform 0.2s ease-in-out;
+        }
+
+
+        .board-table table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .board-table th,
+        .board-table td {
+            padding: 18px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        .board-table th {
+            background: #f8f8f8;
+            font-weight: bold;
+        }
+
+        .board-table tbody tr:hover {
+            background: #f9f9f9;
+        }
+
+        .tag {
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-size: 12px;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .tag.notice {
+            background: #3366ff;
+        }
+
+        .tag.premium {
+            background: #ff8585;
+        }
+
+        .tag.general {
+            background: #888;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .pagination a {
+            padding: 8px 12px;
+            text-decoration: none;
+            color: #3366ff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .pagination a:hover {
+            background: #eef;
+            border-color: #3366ff;
+        }
+
+
+        .footer-wrapper {
+            width: 100vw;   
+            background-color: #ffffff; 
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+            border-top: 0.5px solid #d3d3d3;
+        }
+
+        footer {
+            color: #909090;
+            text-align: left;
+            font-family: "NotoSansKr-Light", sans-serif;
+            background: #ffffff;
+            padding: 20px;
+            font-size: 12px;
+            color: #666;
+            margin: 0 auto; 
+            width: 80%; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: 60%;
+        }
+
+        footer .info1 {
+            color: #909090;
+            margin: 30px 10px 10px 30px;
+            font-family: "NotoSansKr-Medium", sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+        }
+
+        footer .info2 {
+            margin: 30px 10px 10px 30px;
+            font-size: 12px;
+            letter-spacing: 0.2px;
+            font-weight: 300;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        footer .info3 {
+            margin: 30px 10px 10px 30px;
+            font-size: 11px;
+            letter-spacing: 0.2px;
+            font-weight: 300;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header-wrapper">
+    <div class="header-wrapper2">
+    <header class="header">
+        <div class="logo"><a href="main.html"><img src="images/Mule.png"></a></div>
+        <div class="search-container">
+            <input type="text" placeholder="Search...">
+        </div>
+        
+        <div class="icons">
+            <a href="#"><img src="images/dark mode.png"></a>
+            <a href="#"><img src="images/mypage.png"></a>
+            <a href="#"><img src="images/alarm.png"></a>
+            <a href="#" class="login">LogIn</a>
+        </div>
+    </header>
+    </div>
+    
+    <nav class="nav">
+        <div class="menu">
+            <div class="menu-item">
+                <a href="sub1.html">물인/게시판</a>
+                <div class="submenu">
+                    <a href="#">공지</a>
+                    <a href="#">명예의 전당</a>
+                    <a href="#">뮬인</a>
+                    <a href="#">사용기</a>
+                    <a href="#">사운드 샘플</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="sub2.html">악기장터</a>
+                <div class="submenu">
+                    <a href="#">기타</a>
+                    <a href="#">베이스</a>
+                    <a href="#">앰프</a>
+                    <a href="#">드럼/퍼커션</a>
+                    <a href="#">이펙터</a>
+                    <a href="#">레코딩/PA/키보드</a>
+                    <a href="#">클래식</a>
+                    <a href="#">그 외</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="sub3.html">공간대여</a>
+                <div class="submenu">
+                    <a href="#">전체</a>
+                    <a href="#">합주실</a>
+                    <a href="#">개인 연습실</a>
+                    <a href="#">클럽</a>
+                    <a href="#">공연장</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">구인/구직</a>
+                <div class="submenu">
+                    <a href="#">학교</a>
+                    <a href="#">학원</a>
+                    <a href="#">멤버</a>
+                    <a href="#">녹음/믹싱</a>
+                    <a href="#">악보/MR</a>
+                    <a href="#">반주/보컬/세션</a>
+                    <a href="#">작편곡/작사</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">공연/대회/오디션</a>
+                <div class="submenu">
+                    <a href="#">공연/세미나</a>
+                    <a href="#">대회/공모</a>
+                    <a href="#">오디션</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">포인트몰</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-wrapper">
+
+        <div class="board-header">
+            <div class="board-path">Home > 뮬인/게시판</div>
+            <div class="board-filters">
+                <div class="filter-item">
+                    <button class="filter-button">공지</button>
+                    <div class="submenu">
+                        <a href="#">전체</a>
+                        <a href="#">일반</a>
+                        <a href="#">투기</a>
+                        <a href="#">뉴스</a>
+                    </div>
+                </div>
+                <div class="filter-item">
+                    <button class="filter-button">명예의 전당</button>
+                    <div class="submenu">
+                        <a href="#">주간 베스트</a>
+                        <a href="#">월간 베스트</a>
+                        <a href="#">레전드</a>
+                        <a href="#">멤버 TOP</a>
+                    </div>
+                </div>
+                <div class="filter-item">
+                    <button class="filter-button">뮬인</button>
+                    <div class="submenu">
+                        <a href="#">전체</a>
+                        <a href="#">일반</a>
+                        <a href="#">회원 영상</a>
+                        <a href="#">질문</a>
+                    </div>
+                </div>
+                <div class="filter-item">
+                    <button class="filter-button">강좌</button>
+                </div>
+                <div class="filter-item">
+                    <button class="filter-button">사용기</button>
+                </div>
+                <div class="filter-item">
+                    <button class="filter-button">사운드 샘플</button>
+                </div>
+                <div class="search-bar">
+                    <input type="text" placeholder=":: 검색어 ::" />
+                    <button class="search-button"><img src="images/find.png"></button>
+                </div>
+            </div>
+        </div>
+
+            <div class="board-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>번호</th>
+                            <th>분류</th>
+                            <th>제목</th>
+                            <th>글쓴이</th>
+                            <th>날짜</th>
+                            <th>조회수</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>5</td>
+                            <td><span class="tag notice">공지</span></td>
+                            <td>2024 12월 진행 예정 메인상품 공개!</td>
+                            <td>뮬지기</td>
+                            <td>11.01</td>
+                            <td>365</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td><span class="tag notice">공지</span></td>
+                            <td>업체의 협찬에 의한 사용기 등록 시 해당 사실을 명시해야 합니다. </td>
+                            <td>뮬지기</td>
+                            <td>11.01</td>
+                            <td>365</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td><span class="tag notice">공지</span></td>
+                            <td>뮬人/게시판 이용 안내</td>
+                            <td>뮬지기</td>
+                            <td>11.01</td>
+                            <td>365</td> 
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><span class="tag notice">공지</span></td>
+                            <td>뮬보드 포인트 보상 안내</td>
+                            <td>뮬지기</td>
+                            <td>11.01</td>
+                            <td>365</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td><span class="tag notice">공지</span></td>
+                            <td>뮬 홈페이지 이용 안내 (v. 241125)</td>
+                            <td>뮬지기</td>
+                            <td>11.01</td>
+                            <td>365</td>
+                        </tr>
+
+                        <tr>
+                            <td>5</td>
+                            <td><span class="tag premium">당첨</span></td>
+                            <td>[잉베이챌린지] 형왔다. Far beyond the sun 라이브 버전 즉흥</td>
+                            <td>뮬지기</td>
+                            <td>11.01</td>
+                            <td>365</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><span class="tag premium">당첨</span></td>
+                            <td>[나눔]크림톤 카피페달</td>
+                            <td>뮬지기</td>
+                            <td>11.01</td>
+                            <td>365</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><span class="tag premium">당첨</span></td>
+                            <td>포인트 쫌 모자란 김에 나눔합니다</td>
+                            <td>뮬지기</td>
+                            <td>11.01</td>
+                            <td>365</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><span class="tag premium">당첨</span></td>
+                            <td>여행용 기타를 샀는데 필요가 없어졌습니다...</td>
+                            <td>뮬지기</td>
+                            <td>11.01</td>
+                            <td>365</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><span class="tag premium">당첨</span></td>
+                            <td>혹시나 본인 장비로 톤잡기 어려우시거나 힘드신분들</td>
+                            <td>뮬지기</td>
+                            <td>11.01</td>
+                            <td>365</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>3658</td>
+                            <td><span class="tag general">일반</span></td>
+                            <td>제목</td>
+                            <td>글쓴이</td>
+                            <td>11.25</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>3658</td>
+                            <td><span class="tag general">일반</span></td>
+                            <td>제목</td>
+                            <td>글쓴이</td>
+                            <td>11.25</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>3658</td>
+                            <td><span class="tag general">일반</span></td>
+                            <td>제목</td>
+                            <td>글쓴이</td>
+                            <td>11.25</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>3658</td>
+                            <td><span class="tag general">일반</span></td>
+                            <td>제목</td>
+                            <td>글쓴이</td>
+                            <td>11.25</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>3658</td>
+                            <td><span class="tag general">일반</span></td>
+                            <td>제목</td>
+                            <td>글쓴이</td>
+                            <td>11.25</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>3658</td>
+                            <td><span class="tag general">일반</span></td>
+                            <td>제목</td>
+                            <td>글쓴이</td>
+                            <td>11.25</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>3658</td>
+                            <td><span class="tag general">일반</span></td>
+                            <td>제목</td>
+                            <td>글쓴이</td>
+                            <td>11.25</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>3658</td>
+                            <td><span class="tag general">일반</span></td>
+                            <td>제목</td>
+                            <td>글쓴이</td>
+                            <td>11.25</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>3658</td>
+                            <td><span class="tag general">일반</span></td>
+                            <td>제목</td>
+                            <td>글쓴이</td>
+                            <td>11.25</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>3658</td>
+                            <td><span class="tag general">일반</span></td>
+                            <td>제목</td>
+                            <td>글쓴이</td>
+                            <td>11.25</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>3658</td>
+                            <td><span class="tag general">일반</span></td>
+                            <td>제목</td>
+                            <td>글쓴이</td>
+                            <td>11.25</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>3658</td>
+                            <td><span class="tag general">일반</span></td>
+                            <td>제목</td>
+                            <td>글쓴이</td>
+                            <td>11.25</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>3658</td>
+                            <td><span class="tag general">일반</span></td>
+                            <td>제목</td>
+                            <td>글쓴이</td>
+                            <td>11.25</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>3658</td>
+                            <td><span class="tag general">일반</span></td>
+                            <td>제목</td>
+                            <td>글쓴이</td>
+                            <td>11.25</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>3658</td>
+                            <td><span class="tag general">일반</span></td>
+                            <td>제목</td>
+                            <td>글쓴이</td>
+                            <td>11.25</td>
+                            <td>10</td>
+                        </tr>
+                       
+                       
+                    </tbody>
+                </table>
+            </div>
+        
+            <div class="pagination">
+                <a href="#">&#60;</a>
+                <a href="#">1</a>
+                <a href="#">2</a>
+                <a href="#">3</a>
+                <a href="#">...</a>
+                <a href="#">100</a>
+                <a href="#">&#62;</a>
+            </div>
+        </div>        
+
+    </div>
+
+    <div class="footer-wrapper">
+        <footer>
+            <div class="info1"><br>
+                사이트소개 | 이용약관 | 개인정보처리방침 | 책임한계 및 법적고지 |
+                이메일수집거부 | 광고안내 | 불법자료 신고 | 불량회원 신고
+              </div>
+            <div class="info2">
+                물은 본사이트에서 물품을 직접 판매하지 않습니다. 물에 등록된 판매물품과 물품의 내용은 판매자가 등록한 것으로 물과 물의 운영진은 그 등록내용과 상품에 대하여 일체의 책임을 지지 않습니다. <br>물에 등록된 모든 광고의 저작권 및 법적책임은 자료제공사(또는 글쓴이)에게 있으므로 물은 광고에 대한 책임을 지지 않습니다. <br>본사의 동의 없는 크롤링(스크래핑) 등의 어떠한 자동수집도 허용하지 않습니다. 물운영진이 사용하는 아이디는 muleadmin1, muleadmin2, muleadmin3이며 운영진은 회원에게 개별적으로 접촉하지 않습니다. <br>v.1123.571-dev
+            </div>
+            <div class="info3">
+                사업자: 120-03-29582 | 통신판매업신고번호: 2006-서초-07291 | 상호: 물 | 대표자: 송정수 | 소재지: 서울시 서초구 남부순환로 347길 28 반도빌딩 A38호<br>
+                문자: 02-6247-7203 | 이메일: admin@mule.co.kr | 고객지원(광고문의): 플러스친구 mulecs<br><br><br><br>
+            </div>
+        </footer>
+        </div>
+
+</body>
+</html>

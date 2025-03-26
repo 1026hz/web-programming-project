@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>main</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            let slideIndex = 0;
+            showSlides();
+
+            function showSlides() {
+                const slides = document.getElementsByClassName("mySlides");
+                const dots = document.getElementsByClassName("dot");
+                
+                for (let i = 0; i < slides.length; i++) {
+                    slides[i].style.display = "none";
+                }
+
+                slideIndex++;
+                if (slideIndex > slides.length) slideIndex = 1;
+
+                for (let i = 0; i < dots.length; i++) {
+                    dots[i].className = dots[i].className.replace(" active", "");
+                }
+
+                slides[slideIndex - 1].style.display = "block";
+                dots[slideIndex - 1].className += " active";
+
+                setTimeout(showSlides, 5000);
+            }
+        });
+    </script>
+    <style>
+        html {
+            background-color: #f8f8f8;
+            min-height: 100%;
+            min-width: none;
+        }       
+
+        body {
+            font-family: 'Noto Sans Kr', sans-serif;
+            margin: 0 auto;
+            padding: 0;
+            max-width: 1400px; 
+            width: 100%; 
+            background-color: transparent;
+        }
+
+        .header-wrapper {
+            width: 100vw;          
+            background-color: #f8f8f8;
+            position: relative;   
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .header-wrapper2{
+            width: 100vw;   
+            background-color: #ffffff; 
+            position: relative;   
+            left: 50%;
+            transform: translateX(-50%); 
+            border-bottom: 0.5px solid #ccc ;
+        }
+
+        .header {
+            max-width: 1400px;    
+            margin: 0 auto;       
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background-color: #fff; 
+            z-index: 10;
+        }
+
+        .header .logo {
+            margin-left: 60px;
+            margin-right: 70px;
+        }
+
+        .header .logo img {
+            height: 30px;
+        }
+
+        .header .search-container {
+            flex-grow: 1;
+            max-width: 600px;
+        }
+
+        .header .search-container input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            outline: none;
+            font-size: 14px;
+            padding-left: 35px;
+        }
+
+        .header .icons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-right: 60px;
+            margin-left: 80px;
+        }
+
+        .header .icons a {
+            text-decoration: none;
+            color: #727272;
+            font-size: 18px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .header .icons a:hover {
+            color:#3366ff;
+            transform: scale(1.05); 
+        }
+
+        .header .icons a img {
+            width: 17px;
+            height: 17px; 
+            object-fit: cover; 
+            transition: transform 0.2s ease-in-out; 
+        }
+
+        .header .icons a img:hover {
+            transform: scale(1.1); /* 호버 시 약간 확대 */
+        }
+
+        .header .icons .login {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .nav {
+            background-color: #fff; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 17px 20px;
+            font-size: 14px;    
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .menu {
+            display: flex;
+            gap: 80px;
+            position: relative;
+        }
+
+        .menu-item {
+            position: relative;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: #333;
+            font-size: 13px;
+            transition: transform 0.2s ease-in-out; /* 부드러운 전환 */
+        }
+
+        .menu a:hover {
+            color: #3366ff; /* 색상 변경 */
+        }
+
+        .submenu {
+            display: none; 
+            position: absolute;
+            top: 100%; 
+            left: 0;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            z-index: 10;
+            padding: 10px 0;
+            min-width: 150px;
+        }
+
+        .submenu a {
+            display: block;
+            text-decoration: none;
+            color: #333;
+            padding: 8px 15px;
+            font-size: 12px;
+            transition: background-color 0.2s;
+        }
+
+        .submenu a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .menu-item:hover .submenu {
+            display: block;
+        }
+
+        .main-wrapper {
+            max-width: 1400px; /* 최대 너비 */
+            margin: 0 auto; /* 중앙 정렬 */
+            padding: 0 20px; /* 좌우 패딩 추가 */
+            background-color: #f8f8f8; /* 배경색 유지 */
+            box-sizing: border-box; /* 패딩 포함 */
+        }
+   
+        .main {
+            width: 90%;
+            height: 650px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .slideshow-container {
+            max-width: 100%;
+            width: 100%; 
+            position: relative;
+            margin: auto;
+            overflow: hidden; 
+        }
+
+        .mySlides {
+            display: none; 
+            width: 97%;
+            height: 650px;
+            object-fit: cover;
+            margin-left: 20px;
+        }
+
+        /* The dots/bullets/indicators */
+        .dot {
+            cursor: pointer;
+            height: 5px;
+            width: 5px;
+            margin: 0 2px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            transition: background-color 0.6s ease;
+        }
+
+        .active, .dot:hover {
+            background-color: #717171;
+        }
+
+        .content {
+            max-width:1600px;
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin: 20px;
+        }
+
+        .box {
+            width: 48%;
+        }
+
+        .box h2 {
+            color: #3563e9;
+            text-align: center;
+            font-family: "NotoSansKr-Medium", sans-serif;
+            font-weight: 500;
+            display: flex;
+            padding: 0px 0px 10px 13px;
+        }
+
+        .box ul {
+            list-style: none;
+            padding: 0;
+            margin: 15px 10px 10px 10px;
+        }
+
+        .box ul li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px; /* 리스트 항목 간격 */
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .button-outline {
+            border-radius: 5px;
+            border: 1px solid var(--light-primary-origin, #3563e9);
+            padding: 5px 10px;
+            display: flex;
+            align-items: center;
+            margin-right: 10px; /* 버튼과 텍스트 사이 간격 */
+            flex-shrink: 0;
+        }
+
+        .button {
+            color: var(--light-primary-origin, #3563e9);
+            text-align: center;
+            font-family: "Inter-Medium", sans-serif;
+            font-size: 12px;
+            letter-spacing: 0.46px;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .box img {
+            width: 450px; /* 너비와 높이를 동일하게 설정 */
+            height: 450px;
+            object-fit: contain; /* 비율을 유지하며 잘라내기 */
+            margin: 0 auto; /* 이미지를 중앙 정렬 */
+            display: block; /* 블록 요소로 처리 */
+            border-radius: 10px; /* 선택적으로 둥근 모서리 */
+        }
+
+
+        .content .box {
+            flex: 1 1 calc(50% - 20px);
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .content .box h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .content .box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .content .box ul li {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .content .box img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .section {
+            margin: 20px 20px 0px 20px;
+            padding: 20px;
+            gap: 20px;
+            background-color: #ffffff;
+            border-radius: 10px; 
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            color: #3563e9;
+            text-align: left;
+            font-family: "NotoSansKr-Bold", sans-serif;
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding-left: 20px; 
+        }
+
+        .items {
+            display: flex;
+            flex-wrap: wrap; 
+            gap: 20px;
+            justify-content: center; 
+            padding: 0 20px; 
+        }
+
+        .item {
+            width: calc(14.66% - 20px); 
+            text-align: center;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); 
+            border-radius: 8px;
+            background-color: #f9f9f9; 
+            padding: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease; 
+        }
+
+        .item:hover {
+            transform: translateY(-5px); 
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .item img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .item p {
+            font-size: 13px;
+            color: #333333;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        .banner {
+            margin: 20px;
+            text-align: center;
+        }
+
+        .banner img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .footer-wrapper {
+            width: 100vw;   
+            background-color: #ffffff; 
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+            border-top: 0.5px solid #d3d3d3;
+        }
+
+        footer {
+            color: #909090;
+            text-align: left;
+            font-family: "NotoSansKr-Light", sans-serif;
+            background: #ffffff;
+            padding: 20px;
+            font-size: 12px;
+            color: #666;
+            margin: 0 auto; 
+            width: 80%; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: 60%;
+        }
+
+        footer .info1 {
+            color: #909090;
+            margin: 30px 10px 10px 30px;
+            font-family: "NotoSansKr-Medium", sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+        }
+
+        footer .info2 {
+            margin: 30px 10px 10px 30px;
+            font-size: 12px;
+            letter-spacing: 0.2px;
+            font-weight: 300;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        footer .info3 {
+            margin: 30px 10px 10px 30px;
+            font-size: 11px;
+            letter-spacing: 0.2px;
+            font-weight: 300;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header-wrapper">
+    <div class="header-wrapper2">
+    <header class="header">
+        <div class="logo"><a href="main.html"><img src="images/Mule.png"></a></div>
+        <div class="search-container">
+            <input type="text" placeholder="Search...">
+        </div>
+        
+        <div class="icons">
+            <a href="#"><img src="images/dark mode.png"></a>
+            <a href="#"><img src="images/mypage.png"></a>
+            <a href="#"><img src="images/alarm.png"></a>
+            <a href="#" class="login">LogIn</a>
+        </div>
+    </header>
+    </div>
+    
+    <nav class="nav">
+        <div class="menu">
+            <div class="menu-item">
+                <a href="sub1.html">물인/게시판</a>
+                <div class="submenu">
+                    <a href="#">공지</a>
+                    <a href="#">명예의 전당</a>
+                    <a href="#">뮬인</a>
+                    <a href="#">사용기</a>
+                    <a href="#">사운드 샘플</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="sub2.html">악기장터</a>
+                <div class="submenu">
+                    <a href="#">기타</a>
+                    <a href="#">베이스</a>
+                    <a href="#">앰프</a>
+                    <a href="#">드럼/퍼커션</a>
+                    <a href="#">이펙터</a>
+                    <a href="#">레코딩/PA/키보드</a>
+                    <a href="#">클래식</a>
+                    <a href="#">그 외</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="sub3.html">공간대여</a>
+                <div class="submenu">
+                    <a href="#">전체</a>
+                    <a href="#">합주실</a>
+                    <a href="#">개인 연습실</a>
+                    <a href="#">클럽</a>
+                    <a href="#">공연장</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">구인/구직</a>
+                <div class="submenu">
+                    <a href="#">학교</a>
+                    <a href="#">학원</a>
+                    <a href="#">멤버</a>
+                    <a href="#">녹음/믹싱</a>
+                    <a href="#">악보/MR</a>
+                    <a href="#">반주/보컬/세션</a>
+                    <a href="#">작편곡/작사</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">공연/대회/오디션</a>
+                <div class="submenu">
+                    <a href="#">공연/세미나</a>
+                    <a href="#">대회/공모</a>
+                    <a href="#">오디션</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <a href="#">포인트몰</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-wrapper">
+
+    <div class="slideshow-container">
+        <img class="mySlides" src="images/main1.jpg" alt="">
+        <img class="mySlides" src="images/main2.jpg" alt="">
+        <img class="mySlides" src="images/main3.jpg" alt="">
+        <img class="mySlides" src="images/main4.jpg" alt="">
+        <img class="mySlides" src="images/main5.jpg" alt="">
+    </div>  
+
+    <div style="text-align:center">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+    </div>
+
+    <section class="content">
+        <div class="box">
+            <h2>물투데이</h2>
+            <ul>
+                <li>
+                    <div class="button-outline">
+                        <div class="button">공지</div>
+                    </div>
+                    백패드 구매한다며 다른 사이트에 상품등록을 유도하는 경우 주의 바랍니다.
+                </li>
+                <li>
+                    <div class="button-outline">
+                        <div class="button">세일</div>
+                    </div>
+                    프리버드 블랙프라이데이 세일 23일 - 24일
+                </li>
+                <li>
+                    <div class="button-outline">
+                        <div class="button">세일</div>
+                    </div>
+                    따뜻해지는 특별한 할인 | MUCL
+                </li>
+                <li>
+                    <div class="button-outline">
+                        <div class="button">행사</div>
+                    </div>
+                    오렌지우드 올솔리드 출시 기념 이벤트 진행 중
+                </li>
+                <li>
+                    <div class="button-outline">
+                        <div class="button">행사</div>
+                    </div>
+                    Michael Tuttle x Nashguitars 기타 쇼케이스 (11/9 - 11/29)
+                </li>
+                <li>
+                    <div class="button-outline">
+                        <div class="button">채용</div>
+                    </div>
+                    영상컨텐츠회 - 악기 사진 촬영 및 영상 촬영/편집 정규직 모집
+                </li>
+                <li>
+                    <div class="button-outline">
+                        <div class="button">오픈</div>
+                    </div>
+                    아택트 스튜디오 (브라비엠협정점)
+                </li>
+                <li>
+                    <div class="button-outline">
+                        <div class="button">행사</div>
+                    </div>
+                    롤EXOD, DOD-250 오버드라이브 품절 프로모션
+                </li>
+                <li>
+                    <div class="button-outline">
+                        <div class="button">세일</div>
+                    </div>
+                    투 노트 오디오 블랙 프라이데이 특화 세일
+                </li>
+                <li>
+                    <div class="button-outline">
+                        <div class="button">모집</div>
+                    </div>
+                    상명대학교 미래교육원 실용음악학 전공
+                </li>
+            </ul>
+        </div>
+    
+        <div class="box">
+            <img src="images/ad2.png" alt="Promotion">
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="box">
+            <h2>물보드</h2>
+            <ul>
+                <li>
+                    <div class="button-outline">
+                        <div class="button">1위</div>
+                    </div>
+                    [나눔 완료] 데님 일렉기타 나눔합니다.
+                </li>
+                <li>
+                    <div class="button-outline">
+                        <div class="button">2위</div>
+                    </div>
+                    [엠베이첸지] 왕잔닥. Far beyond the sun 라이브 버전 족층
+                </li>
+                <li>
+                    <div class="button-outline">
+                        <div class="button">3위</div>
+                    </div>
+                    [재나눔] 조립기타 나눔
+                </li>
+                <li>
+                    <div class="button-outline">
+                        <div class="button">4위</div>
+                    </div>
+                    제자가 군대 간지 3일만에 하늘나라로 갔습니다..
+                </li>
+                <li>
+                    <div class="button-outline">
+                        <div class="button">5위</div>
+                    </div>
+                    새 케이블을 나눔합니다.
+                </li>
+                <li>
+                    <div class="button-outline">
+                        <div class="button">6위</div>
+                    </div>
+                    [나눔] 소소한 나눔해볼까 합니다.
+                </li>
+                <li>
+                    <div class="button-outline">
+                        <div class="button">7위</div>
+                    </div>
+                    그냥 착한 일
+                </li>
+                <li>
+                    <div class="button-outline">
+                        <div class="button">8위</div>
+                    </div>
+                    [나눔] 우리의 마음도 부숴질 뻔 하기전에..
+                </li>
+                <li>
+                    <div class="button-outline">
+                        <div class="button">9위</div>
+                    </div>
+                    저... 2만 포인트가 부족합니다 59를 위하여...
+                </li>
+                <li>
+                    <div class="button-outline">
+                        <div class="button">10위</div>
+                    </div>
+                    개인적으로 최악의 거래법
+                </li>
+            </ul>
+        </div>
+    
+        <div class="box">
+            <img src="images/ad3.png" alt="Kemper Autumn Sale">
+        </div>
+    </section>
+    
+
+    <section class="section">
+        <h2>신상품</h2>
+        <div class="items">
+            <div class="item">
+                <img src="images/new1.png" alt="">
+                <p>아갈라 앰프 V2 국내 출시</p>
+            </div>
+            <div class="item">
+                <img src="images/new2.png" alt="">
+                <p>아갈라 베이스/스피커 전...</p>
+            </div>
+            <div class="item">
+                <img src="images/new3.png" alt="">
+                <p>쉑터 리퍼 시리즈 국내출시</p>
+            </div>
+            <div class="item">
+                <img src="images/new4.png" alt="">
+                <p>연습용 앰프의 게임체인저</p>
+            </div>
+            <div class="item">
+                <img src="images/new5.png" alt="">
+                <p>[Balaguer] Select Ser...</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2>갤러리</h2>
+        <div class="items">
+            <div class="item">
+                <img src="images/img1.png" alt="">
+                <p>3년동안 교체한 스트링</p>
+            </div>
+            <div class="item">
+                <img src="images/img2.png" alt="">
+                <p>주말맞이 소파샷</p>
+            </div>
+            <div class="item">
+                <img src="images/img3.png" alt="">
+                <p>나노보드 업그레이드</p>
+            </div>
+            <div class="item">
+                <img src="images/img4.png" alt="">
+                <p>드디어 11월 마지막 날</p>
+            </div>
+            <div class="item">
+                <img src="images/img5.png" alt="">
+                <p>prs</p>
+            </div>
+            <div class="item">
+                <img src="images/img6.png" alt=" ">
+                <p>튜브스크리머 5형제</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="banner">
+        <img src="images/ad6.png" alt="Black Friday Sale">
+    </div>
+
+    </div>
+
+    <div class="footer-wrapper">
+        <footer>
+            <div class="info1"><br>
+                사이트소개 | 이용약관 | 개인정보처리방침 | 책임한계 및 법적고지 |
+                이메일수집거부 | 광고안내 | 불법자료 신고 | 불량회원 신고
+              </div>
+            <div class="info2">
+                물은 본사이트에서 물품을 직접 판매하지 않습니다. 물에 등록된 판매물품과 물품의 내용은 판매자가 등록한 것으로 물과 물의 운영진은 그 등록내용과 상품에 대하여 일체의 책임을 지지 않습니다. <br>물에 등록된 모든 광고의 저작권 및 법적책임은 자료제공사(또는 글쓴이)에게 있으므로 물은 광고에 대한 책임을 지지 않습니다. <br>본사의 동의 없는 크롤링(스크래핑) 등의 어떠한 자동수집도 허용하지 않습니다. 물운영진이 사용하는 아이디는 muleadmin1, muleadmin2, muleadmin3이며 운영진은 회원에게 개별적으로 접촉하지 않습니다. <br>v.1123.571-dev
+            </div>
+            <div class="info3">
+                사업자: 120-03-29582 | 통신판매업신고번호: 2006-서초-07291 | 상호: 물 | 대표자: 송정수 | 소재지: 서울시 서초구 남부순환로 347길 28 반도빌딩 A38호<br>
+                문자: 02-6247-7203 | 이메일: admin@mule.co.kr | 고객지원(광고문의): 플러스친구 mulecs<br><br><br><br>
+            </div>
+        </footer>
+        </div>
+
+</body>
+</html>
